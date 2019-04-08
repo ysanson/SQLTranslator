@@ -17,9 +17,9 @@ namespace SQLTranslator
             string outputName = args[1];
             if (File.Exists(fileName))
             {
-                using (StreamReader inputStream = new StreamReader(fileName, true))
+                using (StreamReader inputStream = new StreamReader(fileName, encoding: System.Text.Encoding.GetEncoding("iso-8859-1")))
                 {
-                    using (StreamWriter outputStream = new StreamWriter(File.Open(outputName, FileMode.Create), encoding: System.Text.Encoding.Unicode))
+                    using (StreamWriter outputStream = new StreamWriter(File.Open(outputName, FileMode.Create), encoding: System.Text.Encoding.UTF8))
                     {
                         Console.WriteLine("Beginning translation.");
                         string line;
@@ -28,6 +28,10 @@ namespace SQLTranslator
                         {
                             line = inputStream.ReadLine();
                             line = line.Replace('`', '"');
+
+                            if (line.Contains('�'))
+                                Console.WriteLine("There is an é");
+
                             //Case CREATE TABLE
                             if (line.StartsWith("CREATE TABLE"))
                             {

@@ -51,6 +51,7 @@ namespace SQLTranslator
                 else if (newDeclaration.Contains("ENUM"))
                 {
                     string[] enums = newDeclaration.TrimStart().Split(" "); //0: property name 1: ENUM(...) 2: (NOT) 3: NULL 4: DEFAULT 5: def Value
+                    string dropType = "DROP TYPE IF EXISTS" + enums[0].Trim('"') + "_type";
                     string enumeration = "CREATE TYPE " + enums[0].Trim('"') + "_type AS " + enums[1] +(";");
                     beforeStatements.Add(enumeration);
 

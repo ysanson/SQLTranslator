@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLTranslator.Destination;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -17,6 +18,8 @@ namespace SQLTranslator
             string outputName = args[1];
             if (File.Exists(fileName))
             {
+                AbstractDestinationFactory destinationFactory = new DestinationFactory();
+                IDestination destination = destinationFactory.CreatePostgreSQLDestination();
                 using (StreamReader inputStream = new StreamReader(fileName, encoding: System.Text.Encoding.GetEncoding("iso-8859-1")))
                 {
                     using (StreamWriter outputStream = new StreamWriter(File.Open(outputName, FileMode.Create), encoding: System.Text.Encoding.UTF8))
@@ -29,9 +32,6 @@ namespace SQLTranslator
                             line = inputStream.ReadLine();
                             line = line.Replace('`', '"');
 
-                            if (line.Contains('�'))
-                                Console.WriteLine("There is an é");
-
                             //Case CREATE TABLE
                             if (line.StartsWith("CREATE TABLE"))
                             {
@@ -42,7 +42,7 @@ namespace SQLTranslator
                                     line = line.Replace('`', '"');
                                     bloc.Add(line);
                                 } while (!line.StartsWith(')'));
-                                bloc = PostgresSQLTranslator.GenerateTable(bloc);
+                                bloc = destination.GenerateTable(bloc);
                                 foreach (string blocLine in bloc)
                                 {
                                     outputStream.WriteLine(blocLine);
@@ -52,14 +52,14 @@ namespace SQLTranslator
                             //Case INSERT INTO
                             else if (line.StartsWith("INSERT INTO"))
                             {
-                                translatedLine = PostgresSQLTranslator.GenerateInsert(line);
+                                translatedLine = destination.GenerateInsert(line);
                                 outputStream.WriteLine(translatedLine);
                             }
 
                             //Case DROP TABLE
                             else if (line.StartsWith("DROP TABLE"))
                             {
-                                translatedLine = PostgresSQLTranslator.GenerateDrop(line);
+                                translatedLine = destination.GenerateDrop(line);
                                 outputStream.WriteLine(translatedLine);
                             }
 

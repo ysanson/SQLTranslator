@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SQLTranslator": {
+      "commandName": "Project",
+      "commandLineArgs": "sifcad_old.sql sifcad.sql"
+    }
+  }
+}

@@ -23,7 +23,7 @@ namespace SQLTranslator
             if (File.Exists(fileName))
             {
                 AbstractDestinationFactory destinationFactory = new DestinationFactory();
-                IDestination destination = destinationFactory.CreateSQLTranslator(AbstractDestinationFactory.Destinations.PostgreSQL11);
+                ITranslator translator = destinationFactory.CreateSQLTranslator(AbstractDestinationFactory.Destinations.PostgreSQL11);
                 using (StreamReader inputStream = new StreamReader(fileName, encoding: System.Text.Encoding.GetEncoding("iso-8859-1")))
                 {
                     using (StreamWriter outputStream = new StreamWriter(File.Open(outputName, FileMode.Create), encoding: System.Text.Encoding.UTF8))
@@ -46,7 +46,7 @@ namespace SQLTranslator
                                     line = line.Replace('`', '"');
                                     bloc.Add(line);
                                 } while (!line.StartsWith(')'));
-                                bloc = destination.GenerateTable(bloc);
+                                bloc = translator.GenerateTable(bloc);
                                 foreach (string blocLine in bloc)
                                 {
                                     outputStream.WriteLine(blocLine);
@@ -56,14 +56,14 @@ namespace SQLTranslator
                             //Case INSERT INTO
                             else if (line.StartsWith("INSERT INTO"))
                             {
-                                translatedLine = destination.GenerateInsert(line);
+                                translatedLine = translator.GenerateInsert(line);
                                 outputStream.WriteLine(translatedLine);
                             }
 
                             //Case DROP TABLE
                             else if (line.StartsWith("DROP TABLE"))
                             {
-                                translatedLine = destination.GenerateDrop(line);
+                                translatedLine = translator.GenerateDrop(line);
                                 outputStream.WriteLine(translatedLine);
                             }
 

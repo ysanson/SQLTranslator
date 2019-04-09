@@ -5,8 +5,12 @@ using System.Text.RegularExpressions;
 
 namespace SQLTranslator.Destination
 {
-    class PostgreSQLDestination : IDestination
+    /// <summary>
+    /// The translator to PostgreSQL.
+    /// </summary>
+    class PostgreSQLTranslator : ITranslator
     {
+        
         public List<string> GenerateTable(List<string> inputBloc)
         {
             List<string> tableBody = new List<string>();

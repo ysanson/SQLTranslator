@@ -6,11 +6,24 @@ namespace SQLTranslator.Destination
 {
     class DestinationFactory : AbstractDestinationFactory
     {
-
-        public override IDestination CreatePostgreSQLDestination()
+        /// <summary>
+        /// Creates a new SQL destination.
+        /// </summary>
+        /// <param name="destination">The translator to create.</param>
+        /// <returns>A translator. By default it creates a Postgres translator.</returns>
+        public override ITranslator CreateSQLTranslator(Destinations destination)
         {
-            return new PostgreSQLDestination();
-        }
+            switch (destination)
+            {
+                case Destinations.PostgreSQL11:
+                    return new PostgreSQLTranslator();
+                case Destinations.OracleSQL:
+                    throw new NotImplementedException();
 
+                default:
+                    return new PostgreSQLTranslator();
+                
+            }
+        }
     }
 }

@@ -5,6 +5,10 @@ using System.IO;
 
 namespace SQLTranslator
 {
+    /// <summary>
+    /// Main program of this application. It takes two arguments, the input file and the output file.
+    /// The output is (re)created.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
@@ -19,7 +23,7 @@ namespace SQLTranslator
             if (File.Exists(fileName))
             {
                 AbstractDestinationFactory destinationFactory = new DestinationFactory();
-                IDestination destination = destinationFactory.CreatePostgreSQLDestination();
+                IDestination destination = destinationFactory.CreateSQLTranslator(AbstractDestinationFactory.Destinations.PostgreSQL11);
                 using (StreamReader inputStream = new StreamReader(fileName, encoding: System.Text.Encoding.GetEncoding("iso-8859-1")))
                 {
                     using (StreamWriter outputStream = new StreamWriter(File.Open(outputName, FileMode.Create), encoding: System.Text.Encoding.UTF8))

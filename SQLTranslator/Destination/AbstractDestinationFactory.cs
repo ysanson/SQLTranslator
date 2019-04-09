@@ -6,7 +6,8 @@ namespace SQLTranslator.Destination
 {
     public abstract class AbstractDestinationFactory
     {
+        public enum Destinations { PostgreSQL11, OracleSQL };
 
-        public abstract IDestination CreatePostgreSQLDestination();
+        public abstract ITranslator CreateSQLTranslator(Destinations destination);
     }
 }

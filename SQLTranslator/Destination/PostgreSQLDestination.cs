@@ -187,8 +187,14 @@ namespace SQLTranslator.Destination
 
         public string GenerateDrop(string inputLine)
         {
-            string output = inputLine.TrimEnd(';');
-            output += " CASCADE;";
+            string output;
+            if(!inputLine.Contains("CASCADE"))
+            {
+                output = inputLine.TrimEnd(';');
+                output += " CASCADE;";
+            }
+            else
+                output = inputLine;
             return output;
         }
     }
